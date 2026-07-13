@@ -34,6 +34,14 @@ body{
     margin-bottom:20px;
 }
     
+    #streak{
+
+    font-size:24px;
+
+    margin-bottom:20px;
+
+}
+    
 </style>
 
 </head>
@@ -44,7 +52,9 @@ body{
 
 <div id="record">📅 今月 0日達成</div>  
 
-<div id="plant">🌱</div> 
+<div id="plant">🌱</div>
+
+<div id="streak">🔥 0日連続</div>
 
 <div id="time">60</div>
 
@@ -69,6 +79,39 @@ function updateRecord(){
         `📅 今月 ${monthlyRecords.length}日達成`;
 
 }    
+
+function updateStreak(){
+
+    let records = JSON.parse(localStorage.getItem("records")) || [];
+
+    records.sort();
+
+    let streak = 0;
+
+    let today = new Date();
+
+    while(true){
+
+        const dateString = today.toLocaleDateString("sv-SE");
+
+        if(records.includes(dateString)){
+
+            streak++;
+
+            today.setDate(today.getDate()-1);
+
+        }else{
+
+            break;
+
+        }
+
+    }
+
+    document.getElementById("streak").textContent =
+    `🔥 ${streak}日連続`;
+
+}
 
 const colors = [
 
@@ -129,11 +172,15 @@ const timer = setInterval(function(){
 　　　　console.log(records);
 
         updateRecord();
+
+        updateStreak();
     }
 
 },1000);
 
 updateRecord();
+
+updateStreak();
 
 </script>
 
