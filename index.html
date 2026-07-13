@@ -67,6 +67,18 @@ body{
     text-align:center;
 
 }
+
+#week{
+
+    margin-top:10px;
+
+    font-weight:bold;
+
+    letter-spacing:8px;
+
+}
+
+する
     
 </style>
 
@@ -151,7 +163,16 @@ function updateStreak(){
  function showCalendar(){
 
     document.getElementById("calendar").innerHTML =
-    "<h2>📅 2026年7月</h2>";
+
+    `<h2>📅 2026年7月</h2>
+
+    <div id="week">
+
+    日　月　火　水　木　金　土
+
+    </div>`;
+
+} 
 
 }   
 
