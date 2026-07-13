@@ -90,6 +90,11 @@ function updateStreak(){
 
     let today = new Date();
 
+    // 今日記録がなければ昨日から数え始める
+    if(!records.includes(today.toLocaleDateString("sv-SE"))){
+        today.setDate(today.getDate()-1);
+    }
+
     while(true){
 
         const dateString = today.toLocaleDateString("sv-SE");
