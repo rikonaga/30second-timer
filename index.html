@@ -11,8 +11,10 @@ body{
     align-items:center;
     height:100vh;
     font-family:sans-serif;
-    background:#faf7f0;
+    background:linear-gradient(180deg,#FAF7F0,#F3E7D2);
     flex-direction:column;
+
+    transition:background 2s linear;
 }
 
 #time{
@@ -44,6 +46,24 @@ body{
 
 let count = 60;
 
+const colors = [
+
+"linear-gradient(180deg,#FAF7F0,#F3E7D2)",
+
+"linear-gradient(180deg,#F8F2DF,#EADFBF)",
+
+"linear-gradient(180deg,#EEF0D9,#DCE7BF)",
+
+"linear-gradient(180deg,#DDEBC8,#C5DFAB)",
+
+"linear-gradient(180deg,#C5E2B0,#A7D38E)",
+
+"linear-gradient(180deg,#A8D98D,#7FC96B)",
+
+"linear-gradient(180deg,#8CCD77,#68B85A)"
+
+];
+
  setTimeout(function(){
 
     document.getElementById("plant").textContent = "🌿";
@@ -61,6 +81,10 @@ const timer = setInterval(function(){
     count--;
 
     document.getElementById("time").textContent = count;
+
+    let stage = Math.floor((60-count)/10);
+
+　　document.body.style.background = colors[stage];
 
     if(count <= 0){
 
