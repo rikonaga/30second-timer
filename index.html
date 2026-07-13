@@ -41,6 +41,32 @@ body{
     margin-bottom:20px;
 
 }
+
+    #calendarButton{
+
+    margin-top:30px;
+
+    padding:10px 20px;
+
+    font-size:18px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+}
+
+#calendar{
+
+    margin-top:20px;
+
+    font-size:22px;
+
+    text-align:center;
+
+}
     
 </style>
 
@@ -52,11 +78,15 @@ body{
 
 <div id="record">📅 今月 0日達成</div>  
 
-<div id="plant">🌱</div>
-
 <div id="streak">🔥 0日連続</div>
 
+<div id="plant">🌱</div>
+
 <div id="time">60</div>
+
+<button id="calendarButton">📊 今月の記録を見る</button>
+
+<div id="calendar"></div>
 
 <script>
 
@@ -118,6 +148,13 @@ function updateStreak(){
 
 }
 
+ function showCalendar(){
+
+    document.getElementById("calendar").innerHTML =
+    "<h2>📅 2026年7月</h2>";
+
+}   
+
 const colors = [
 
 "linear-gradient(180deg,#FAF7F0,#F3E7D2)",
@@ -156,7 +193,7 @@ const timer = setInterval(function(){
 
     let stage = Math.floor((60-count)/10);
 
-　　document.body.style.background = colors[stage];
+    document.body.style.background = colors[stage];
 
     if(count <= 0){
 
@@ -164,8 +201,9 @@ const timer = setInterval(function(){
 
         document.getElementById("time").textContent="片付け完了！";
 
-    　　const today = new Date().toLocaleDateString("sv-SE");
-　　　　console.log(today);
+       const today = new Date().toLocaleDateString("sv-SE");
+　　　  
+        console.log(today);
 
         let records = JSON.parse(localStorage.getItem("records")) || [];
 
@@ -179,6 +217,7 @@ const timer = setInterval(function(){
         updateRecord();
 
         updateStreak();
+        
     }
 
 },1000);
@@ -187,7 +226,12 @@ updateRecord();
 
 updateStreak();
 
+document.getElementById("calendarButton")
+.addEventListener("click", showCalendar);
+
+
 </script>
 
 </body>
 </html>
+
