@@ -77,6 +77,14 @@ body{
     letter-spacing:8px;
 
 }
+
+ #days{
+
+    margin-top:10px;
+
+    line-height:2;
+
+} 
     
 </style>
 
@@ -160,17 +168,46 @@ function updateStreak(){
 
  function showCalendar(){
 
-    document.getElementById("calendar").innerHTML =
+    const now = new Date();
 
-    `<h2>📅 2026年7月</h2>
+    const year = now.getFullYear();
 
-    <div id="week">
+    const month = now.getMonth();
 
-    日　月　火　水　木　金　土
+    const firstDay = new Date(year, month, 1);
 
-    </div>`;
+    const lastDay = new Date(year, month + 1, 0);
 
-} 
+    let html = `
+        <h2>📅 ${year}年${month+1}月</h2>
+        <div id="week">
+        日　月　火　水　木　金　土
+        </div>
+        <div id="days">
+    `;
+
+    // 1日の曜日まで空白を入れる
+    for(let i=0; i<firstDay.getDay(); i++){
+        html += "　　";
+    }
+
+    // 日付を並べる
+    for(let day=1; day<=lastDay.getDate(); day++){
+
+        html += day + " ";
+
+        // 土曜日なら改行
+        if((firstDay.getDay()+day)%7==0){
+            html += "<br>";
+        }
+
+    }
+
+    html += "</div>";
+
+    document.getElementById("calendar").innerHTML = html;
+
+}
 
 const colors = [
 
