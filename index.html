@@ -168,6 +168,8 @@ function updateStreak(){
 
  function showCalendar(){
 
+    let records = JSON.parse(localStorage.getItem("records")) || [];
+
     const now = new Date();
 
     const year = now.getFullYear();
@@ -192,16 +194,26 @@ function updateStreak(){
     }
 
     // 日付を並べる
-    for(let day=1; day<=lastDay.getDate(); day++){
+     for(let day=1; day<=lastDay.getDate(); day++){
 
-        html += day + " ";
+    const dateString =
+        `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
 
-        // 土曜日なら改行
-        if((firstDay.getDay()+day)%7==0){
-            html += "<br>";
-        }
+    if(records.includes(dateString)){
+
+        html += "🌱 ";
+
+    }else{
+
+        html += "□ ";
 
     }
+
+    if((firstDay.getDay()+day)%7==0){
+        html += "<br>";
+    }
+
+}
 
     html += "</div>";
 
