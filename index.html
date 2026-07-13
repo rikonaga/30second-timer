@@ -85,6 +85,20 @@ body{
     line-height:2;
 
 } 
+
+    .done{
+
+    color:green;
+
+    font-weight:bold;
+
+}
+
+.notdone{
+
+    color:#666;
+
+}
     
 </style>
 
@@ -194,18 +208,18 @@ function updateStreak(){
     }
 
     // 日付を並べる
-     for(let day=1; day<=lastDay.getDate(); day++){
+    for(let day=1; day<=lastDay.getDate(); day++){
 
     const dateString =
         `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
 
     if(records.includes(dateString)){
 
-        html += "🌱 ";
+        html += `<span class="done">🌱${day}</span> `;
 
     }else{
 
-        html += "□ ";
+        html += `<span class="notdone">${day}</span> `;
 
     }
 
