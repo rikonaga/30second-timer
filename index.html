@@ -29,6 +29,10 @@ body{
     margin:20px;
 
 }
+    #record{
+    font-size:24px;
+    margin-bottom:20px;
+}
     
 </style>
 
@@ -38,6 +42,8 @@ body{
 
 <h1>60秒片付けよう</h1>
 
+<div id="record">📅 今月 0日達成</div>  
+
 <div id="plant">🌱</div> 
 
 <div id="time">60</div>
@@ -45,6 +51,24 @@ body{
 <script>
 
 let count = 60;
+
+function updateRecord(){
+
+    let records = JSON.parse(localStorage.getItem("records")) || [];
+
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth()+1).padStart(2,"0");
+
+    const thisMonth = `${year}-${month}`;
+
+    const monthlyRecords = records.filter(date => date.startsWith(thisMonth));
+
+    document.getElementById("record").textContent =
+        `📅 今月 ${monthlyRecords.length}日達成`;
+
+}    
 
 const colors = [
 
@@ -103,9 +127,13 @@ const timer = setInterval(function(){
 }
 
 　　　　console.log(records);
+
+        updateRecord();
     }
 
 },1000);
+
+updateRecord();
 
 </script>
 
