@@ -95,6 +95,14 @@ const timer = setInterval(function(){
     　　const today = new Date().toLocaleDateString("sv-SE");
 　　　　console.log(today);
 
+        let records = JSON.parse(localStorage.getItem("records")) || [];
+
+records.push(today);
+
+localStorage.setItem("records", JSON.stringify(records));
+
+console.log(records);
+
     }
 
 },1000);
