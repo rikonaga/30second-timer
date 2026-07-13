@@ -124,6 +124,8 @@ body{
 
 let count = 60;
 
+let calendarVisible = false;
+
 function updateRecord(){
 
     let records = JSON.parse(localStorage.getItem("records")) || [];
@@ -182,6 +184,16 @@ function updateStreak(){
 
  function showCalendar(){
 
+    if(calendarVisible){
+
+    document.getElementById("calendar").innerHTML = "";
+
+    calendarVisible = false;
+
+    return;
+
+} 
+
     let records = JSON.parse(localStorage.getItem("records")) || [];
 
     const now = new Date();
@@ -232,6 +244,8 @@ function updateStreak(){
     html += "</div>";
 
     document.getElementById("calendar").innerHTML = html;
+
+    calendarVisible = true;
 
 }
 
