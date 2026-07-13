@@ -97,12 +97,12 @@ const timer = setInterval(function(){
 
         let records = JSON.parse(localStorage.getItem("records")) || [];
 
-records.push(today);
+　　　　if (!records.includes(today)) {
+    　　records.push(today);
+    　　localStorage.setItem("records", JSON.stringify(records));
+}
 
-localStorage.setItem("records", JSON.stringify(records));
-
-console.log(records);
-
+　　　　console.log(records);
     }
 
 },1000);
