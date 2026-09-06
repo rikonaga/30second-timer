@@ -303,8 +303,6 @@ setTimeout(function(){
     oscillator.start();
     oscillator.stop(audioCtx.currentTime + 0.4);
 }
-③ 60秒終了時に音
-
 const timer = setInterval(function(){
 
     count--;
@@ -321,29 +319,27 @@ const timer = setInterval(function(){
 
         document.getElementById("time").textContent="片付け完了！";
 
-        const timer = setInterval(function(){
+        playFinishSound();
 
-       const today = new Date().toLocaleDateString("sv-SE");
-　　　  
+        const today = new Date().toLocaleDateString("sv-SE");
+
         console.log(today);
 
         let records = JSON.parse(localStorage.getItem("records")) || [];
 
-　　　　if (!records.includes(today)) {
-    　　records.push(today);
-    　　localStorage.setItem("records", JSON.stringify(records));
-}
+        if (!records.includes(today)) {
+            records.push(today);
+            localStorage.setItem("records", JSON.stringify(records));
+        }
 
-　　　　console.log(records);
+        console.log(records);
 
         updateRecord();
 
         updateStreak();
-        
     }
 
 },1000);
-
 updateRecord();
 
 updateStreak();
