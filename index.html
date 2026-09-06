@@ -124,6 +124,8 @@ body{
 
 let count = 60;
 
+let audioCtx;
+
 let calendarVisible = false;
 
 function updateRecord(){
@@ -279,6 +281,30 @@ setTimeout(function(){
 
 },60000); 
 
+    function playFinishSound(){
+
+    if(!audioCtx){
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    const oscillator = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    oscillator.frequency.value = 880;
+    oscillator.type = "sine";
+
+    gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.2, audioCtx.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+
+    oscillator.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 0.4);
+}
+③ 60秒終了時に音
+
 const timer = setInterval(function(){
 
     count--;
@@ -294,6 +320,8 @@ const timer = setInterval(function(){
         clearInterval(timer);
 
         document.getElementById("time").textContent="片付け完了！";
+
+        const timer = setInterval(function(){
 
        const today = new Date().toLocaleDateString("sv-SE");
 　　　  
