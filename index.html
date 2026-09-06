@@ -106,9 +106,9 @@ body{
 
 <body>
 
-<h1>TIDY in 60</h1>
+<h1>TIDY IN 60</h1>
 
-<div id="record">📅 TIDY DAYS 0days</div>  
+<div id="record">📅 TIDY 0days</div>  
 
 <div id="streak">🔥STREAK 0days</div>
 
@@ -140,7 +140,7 @@ function updateRecord(){
     const monthlyRecords = records.filter(date => date.startsWith(thisMonth));
 
     document.getElementById("record").textContent =
-        `📅 今月 ${monthlyRecords.length}日達成`;
+        `📅 TIDY ${monthlyRecords.length}days`;
 
 }    
 
@@ -178,7 +178,7 @@ function updateStreak(){
     }
 
     document.getElementById("streak").textContent =
-    `🔥 ${streak}日連続`;
+    `🔥STREAK ${streak}days`;
 
 }
 
