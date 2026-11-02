@@ -112,13 +112,13 @@ h1{
 
 <h1>TIDY IN 60</h1>
 
-<div id="record">📅 TIDY 0days</div>  
+<div id="record"> TIDY 0days</div>  
 
-<div id="streak">🔥STREAK 0days</div>
+<div id="streak">STREAK 0days</div>
 
 <div id="time">60</div>
 
-<button id="calendarButton">📊 Monthly Record</button>
+<button id="calendarButton"> Monthly Record</button>
 
 <div id="calendar"></div>
 
@@ -144,7 +144,7 @@ function updateRecord(){
     const monthlyRecords = records.filter(date => date.startsWith(thisMonth));
 
     document.getElementById("record").textContent =
-        `📅 TIDY ${monthlyRecords.length}days`;
+        ` TIDY ${monthlyRecords.length}days`;
 
 }    
 
@@ -182,7 +182,7 @@ function updateStreak(){
     }
 
     document.getElementById("streak").textContent =
-    `🔥STREAK ${streak}days`;
+    `STREAK ${streak}days`;
 
 }
 
@@ -211,7 +211,7 @@ function updateStreak(){
     const lastDay = new Date(year, month + 1, 0);
 
     let html = `
-        <h2>📅 ${year}年${month+1}月</h2>
+        <h2> ${year}年${month+1}月</h2>
         <div id="week">
         日　月　火　水　木　金　土
         </div>
