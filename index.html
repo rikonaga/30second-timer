@@ -72,23 +72,32 @@ h1{
 
 }
 
-#week{
-
-    margin-top:10px;
-
-    font-weight:bold;
-
-    letter-spacing:8px;
-
+#week {
+    display: grid;
+    grid-template-columns: repeat(7, 40px);
+    justify-content: center;
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 0;
 }
 
- #days{
+#days {
+    display: grid;
+    grid-template-columns: repeat(7, 40px);
+    justify-content: center;
+    margin-top: 10px;
+    row-gap: 10px;
+    text-align: center;
+}
 
-    margin-top:10px;
-
-    line-height:2;
-
-} 
+#days span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 0;
+    white-space: nowrap;
+}
 
     .done{
 
@@ -211,45 +220,42 @@ function updateStreak(){
     const lastDay = new Date(year, month + 1, 0);
 
     let html = `
-        <h2> ${year}年${month+1}月</h2>
-        <div id="week">
-        日　月　火　水　木　金　土
-        </div>
-        <div id="days">
-    `;
+    <h2>${year}年${month + 1}月</h2>
+    <div id="week">
+        <span>日</span>
+        <span>月</span>
+        <span>火</span>
+        <span>水</span>
+        <span>木</span>
+        <span>金</span>
+        <span>土</span>
+    </div>
+    <div id="days">
+`;
 
-    // 1日の曜日まで空白を入れる
-    for(let i=0; i<firstDay.getDay(); i++){
-        html += "　　";
-    }
-
-    // 日付を並べる
-    for(let day=1; day<=lastDay.getDate(); day++){
-
-    const dateString =
-        `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
-
-    if(records.includes(dateString)){
-
-        html += `<span class="done">🌸${day}</span> `;
-
-    }else{
-
-        html += `<span class="notdone">${day}</span> `;
-
-    }
-
-    if((firstDay.getDay()+day)%7==0){
-        html += "<br>";
-    }
-
+// 1日の曜日まで空のマスを入れる
+for (let i = 0; i < firstDay.getDay(); i++) {
+    html += "<span></span>";
 }
 
-    html += "</div>";
+// 日付を並べる
+for (let day = 1; day <= lastDay.getDate(); day++) {
 
-    document.getElementById("calendar").innerHTML = html;
+    const dateString =
+        `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
-    calendarVisible = true;
+    if (records.includes(dateString)) {
+        html += `<span class="done">🌸${day}</span>`;
+    } else {
+        html += `<span class="notdone">${day}</span>`;
+    }
+}
+
+html += "</div>";
+
+document.getElementById("calendar").innerHTML = html;
+
+calendarVisible = true;
 
 }
 
