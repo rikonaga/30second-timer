@@ -99,6 +99,31 @@ h1{
     white-space: nowrap;
 }
 
+#startButton {
+    margin: 20px;
+    padding: 14px 36px;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #73545D;
+    background: #FFE8F0;
+    border: 2px solid #F3C5D4;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+#startButton:hover {
+    background: #FFD9E5;
+    transform: scale(1.03);
+}
+
+#startButton:disabled {
+    opacity: 0.6;
+    cursor: default;
+    transform: none;
+} 
+
     .done{
 
     color:green;
@@ -124,6 +149,8 @@ h1{
 <div id="record"> ✨TIDY 0days</div>  
 
 <div id="streak"> 🔥STREAK 0days</div>
+
+<button id="startButton">▶ START</button>
 
 <div id="time">60</div>
 
@@ -279,63 +306,238 @@ const colors = [
 
     function playFinishSound(){
 
-    if(!audioCtx){
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // 音声の管理
+let musicInterval = null;
+let masterGain = null;
+
+// カフェ風BGMを開始
+function startBGM() {
+
+    if (!audioCtx) {
+        audioCtx = new (
+            window.AudioContext ||
+            window.webkitAudioContext
+        )();
     }
 
-    const oscillator = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+    audioCtx.resume();
 
-    oscillator.frequency.value = 880;
-    oscillator.type = "sine";
+    masterGain = audioCtx.createGain();
+    masterGain.gain.setValueAtTime(
+        0.0001,
+        audioCtx.currentTime
+    );
 
-    gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.2, audioCtx.currentTime + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+    masterGain.gain.linearRampToValueAtTime(
+        0.08,
+        audioCtx.currentTime + 1
+    );
 
-    oscillator.connect(gain);
-    gain.connect(audioCtx.destination);
+    masterGain.connect(audioCtx.destination);
 
-    oscillator.start();
-    oscillator.stop(audioCtx.currentTime + 0.4);
+    // 穏やかなコード進行
+    const chords = [
+        [261.63, 329.63, 392.00], // C
+        [220.00, 261.63, 329.63], // Am
+        [174.61, 220.00, 261.63], // F
+        [196.00, 246.94, 293.66]  // G
+    ];
+
+    let chordIndex = 0;
+
+    function playChord() {
+
+        if (!audioCtx || !masterGain) return;
+
+        const chord = chords[chordIndex];
+
+        chord.forEach((frequency, index) => {
+
+            const oscillator = audioCtx.createOscillator();
+            const noteGain = audioCtx.createGain();
+
+            oscillator.type = "sine";
+            oscillator.frequency.value = frequency;
+
+            const now = audioCtx.currentTime;
+            const startTime = now + index * 0.12;
+
+            noteGain.gain.setValueAtTime(
+                0.0001,
+                startTime
+            );
+
+            noteGain.gain.linearRampToValueAtTime(
+                0.3,
+                startTime + 0.15
+            );
+
+            noteGain.gain.exponentialRampToValueAtTime(
+                0.0001,
+                startTime + 1.5
+            );
+
+            oscillator.connect(noteGain);
+            noteGain.connect(masterGain);
+
+            oscillator.start(startTime);
+            oscillator.stop(startTime + 1.6);
+        });
+
+        chordIndex = (chordIndex + 1) % chords.length;
+    }
+
+    playChord();
+
+    musicInterval = setInterval(playChord, 1800);
+}
+
+
+// BGMを徐々に止める
+function stopBGM() {
+
+    if (musicInterval !== null) {
+        clearInterval(musicInterval);
+        musicInterval = null;
+    }
+
+    if (masterGain && audioCtx) {
+
+        const now = audioCtx.currentTime;
+
+        masterGain.gain.cancelScheduledValues(now);
+
+        masterGain.gain.setValueAtTime(
+            Math.max(masterGain.gain.value, 0.0001),
+            now
+        );
+
+        masterGain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            now + 0.5
+        );
+
+        const oldGain = masterGain;
+        masterGain = null;
+
+        setTimeout(() => {
+            oldGain.disconnect();
+        }, 600);
+    }
+}
+
+
+// 終了チャイム
+function playFinishSound() {
+
+    if (!audioCtx) return;
+
+    const notes = [659.25, 783.99, 1046.50];
+
+    notes.forEach((frequency, index) => {
+
+        const oscillator = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        const startTime =
+            audioCtx.currentTime + index * 0.18;
+
+        oscillator.type = "sine";
+        oscillator.frequency.value = frequency;
+
+        gain.gain.setValueAtTime(0.0001, startTime);
+
+        gain.gain.linearRampToValueAtTime(
+            0.18,
+            startTime + 0.03
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            startTime + 0.55
+        );
+
+        oscillator.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        oscillator.start(startTime);
+        oscillator.stop(startTime + 0.6);
+    });
 }
 const timer = setInterval(function(){
 
-    count--;
+  // タイマー開始
+function startTimer() {
 
-    document.getElementById("time").textContent = count;
+    const startButton = document.getElementById("startButton");
 
-    let stage = Math.floor((60-count)/10);
+    // 二重スタートを防ぐ
+    startButton.disabled = true;
+    startButton.textContent = "TIDYING...";
 
-    document.body.style.background = colors[stage];
+    // BGMを開始
+    startBGM();
 
-    if(count <= 0){
+    const timer = setInterval(function() {
 
-        clearInterval(timer);
+        count--;
 
-        document.getElementById("time").textContent="YOU DID IT！";
+        document.getElementById("time").textContent = count;
 
-        playFinishSound();
+        // 背景グラデーションを更新
+        let stage = Math.floor((60 - count) / 10);
 
-        const today = new Date().toLocaleDateString("sv-SE");
+        document.body.style.background = colors[stage];
 
-        console.log(today);
+        if (count <= 0) {
 
-        let records = JSON.parse(localStorage.getItem("records")) || [];
+            clearInterval(timer);
 
-        if (!records.includes(today)) {
-            records.push(today);
-            localStorage.setItem("records", JSON.stringify(records));
+            document.getElementById("time").textContent = "YOU DID IT！";
+
+            // BGMを止めて終了チャイム
+            stopBGM();
+            playFinishSound();
+
+            // 今日の日付を取得
+            const today = new Date().toLocaleDateString("sv-SE");
+
+            // 記録を保存
+            let records = JSON.parse(
+                localStorage.getItem("records")
+            ) || [];
+
+            if (!records.includes(today)) {
+                records.push(today);
+                localStorage.setItem(
+                    "records",
+                    JSON.stringify(records)
+                );
+            }
+
+            // 記録と連続日数を更新
+            updateRecord();
+            updateStreak();
+
+            startButton.textContent = "COMPLETED!";
         }
 
-        console.log(records);
+    }, 1000);
+}
 
-        updateRecord();
 
-        updateStreak();
-    }
+// スタートボタンにイベントを登録
+document.getElementById("startButton")
+    .addEventListener("click", startTimer);
 
-},1000);
+
+// 初期表示を更新
+updateRecord();
+updateStreak();
+
+// カレンダーボタン
+document.getElementById("calendarButton")
+    .addEventListener("click", showCalendar); 
 updateRecord();
 
 updateStreak();
